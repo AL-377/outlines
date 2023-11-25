@@ -56,7 +56,10 @@ def build_regex_from_object(object: Union[str, Callable, BaseModel]):
     """
 
     if isinstance(object, type(BaseModel)):
-        schema = object.model_json_schema()
+        if hasattr(object, "model_json_schema"):
+            schema = object.model_json_schema()
+        else: 
+            schema = object.schema()
     elif callable(object):
         schema = get_schema_from_signature(object)
     else:
@@ -255,5 +258,8 @@ def get_schema_from_signature(fn: Callable) -> str:
             arguments[name] = (arg.annotation, ...)
 
     model = create_model("Arguments", **arguments)
-
-    return model.model_json_schema()
+    if hasattr(model, "model_json_schema"):
+        schema = model.model_json_schema()
+    else: 
+        schema = model.schema()
+    return schema
