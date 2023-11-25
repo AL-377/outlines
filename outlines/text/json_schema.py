@@ -97,7 +97,7 @@ def to_regex(resolver: Resolver, instance: dict):
     instance
         The instance to translate
     """
-    whitespace = r"[\n ]*"
+    whitespace = r"[\n ]?"
 
     if "properties" in instance:
         regex = ""
